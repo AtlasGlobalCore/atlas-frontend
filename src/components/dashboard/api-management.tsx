@@ -1060,13 +1060,11 @@ function GatewaysTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Form state
+  // Form state — PayFac V2: No API Key/Secret fields (managed by Admin)
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     provider: 'stripe',
-    provider_api_key: '',
-    provider_secret: '',
     store_id: '',
     environment: 'production',
   });
@@ -1122,8 +1120,7 @@ function GatewaysTab() {
       await api.gateways.create({
         name: formData.name,
         provider: formData.provider as any,
-        provider_api_key: formData.provider_api_key,
-        provider_secret: formData.provider_secret || undefined,
+        provider_api_key: '',  // PayFac V2: empty — credentials managed by Admin via MasterProvider
         store_id: formData.store_id || undefined,
         environment: formData.environment as any,
       });
@@ -1131,8 +1128,6 @@ function GatewaysTab() {
       setFormData({
         name: '',
         provider: 'stripe',
-        provider_api_key: '',
-        provider_secret: '',
         store_id: '',
         environment: 'production',
       });
@@ -1176,10 +1171,18 @@ function GatewaysTab() {
         </button>
       </div>
 
-      {/* Form */}
+      {/* Form — PayFac V2: Simplified (no API Key/Secret) */}
       {showForm && (
         <div className="cyber-panel p-4 border border-[rgba(0,255,65,0.2)]">
           <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-[rgba(0,240,255,0.04)] border border-[rgba(0,240,255,0.15)]">
+              <Info className="w-3.5 h-3.5 text-[#00F0FF] shrink-0 mt-0.5" />
+              <div className="text-[10px] text-[#888899] leading-relaxed">
+                <span className="text-[#E0E0E8] font-medium">Modelo PayFac V2:</span>{' '}
+                As credenciais institucionais são geridas pela equipa Admin. Apenas precisa de ativar o método de pagamento na sua loja.
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label className="block text-[10px] cyber-mono text-[#555566] mb-1">Nome</label>
@@ -1204,29 +1207,6 @@ function GatewaysTab() {
                   <option value="paypal">PayPal</option>
                 </select>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-[10px] cyber-mono text-[#555566] mb-1">API Key</label>
-              <input
-                type="text"
-                value={formData.provider_api_key}
-                onChange={(e) => setFormData({ ...formData, provider_api_key: e.target.value })}
-                placeholder="sk_live_..."
-                className="cyber-input w-full px-3 py-2 rounded-lg text-sm cyber-mono text-[#E0E0E8]"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] cyber-mono text-[#555566] mb-1">Secret (opcional)</label>
-              <input
-                type="password"
-                value={formData.provider_secret}
-                onChange={(e) => setFormData({ ...formData, provider_secret: e.target.value })}
-                placeholder="••••••••"
-                className="cyber-input w-full px-3 py-2 rounded-lg text-sm cyber-mono text-[#E0E0E8]"
-              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1272,7 +1252,7 @@ function GatewaysTab() {
                 className="cyber-btn-primary px-4 py-1.5 rounded-lg text-xs cyber-mono flex items-center gap-2 disabled:opacity-40"
               >
                 {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                {submitting ? 'A guardar...' : 'Criar Gateway'}
+                {submitting ? 'A guardar...' : 'Ativar Gateway'}
               </button>
             </div>
           </form>

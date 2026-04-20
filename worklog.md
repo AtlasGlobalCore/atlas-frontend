@@ -28,3 +28,26 @@ Stage Summary:
 - Multi-tenant store management
 - Payment link generator, wallet/treasury, and payout system
 - Complete API documentation tab with dynamic code examples
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: PayFac V2 Migration — Refactor frontend to align with new backend architecture
+
+Work Log:
+- Updated src/lib/api/contracts.ts: Made provider_api_key and provider_secret optional (?:) in GatewaySettings, CreateGatewayRequest, UpdateGatewayRequest; Added master_provider_id?: string | null to all three; Created MasterProvider, CreateMasterProviderRequest, UpdateMasterProviderRequest, MasterProviderResponse, MasterProvidersResponse interfaces (Section 12)
+- Updated src/lib/api/client.ts: Added imports for new MasterProvider types; Added masterProviders API client (list, get, create, update, delete); Added masterProviders to aggregated api object
+- Refactored src/components/dashboard/api-management.tsx GatewaysTab: Removed provider_api_key and provider_secret from form state; Removed API Key and Secret input fields from form; Added PayFac V2 info banner; Changed submit to send empty provider_api_key; Changed button text from "Criar Gateway" to "Ativar Gateway"
+- Created src/components/dashboard/admin/master-providers.tsx: Full Admin Control Tower component with stats cards, provider table, edit dialog (status toggle, routing params, JSON credentials with validation), notification toasts
+- Updated src/lib/dashboard-store.ts: Added 'admin-master-nodes' to DashboardSection type union
+- Updated src/components/dashboard/sidebar.tsx: Added Server icon import; Added "Infraestrutura Admin" nav item with id admin-master-nodes
+- Updated src/components/dashboard/dashboard-shell.tsx: Added MasterProvidersAdmin import; Added admin-master-nodes section with ADMIN // INFRAESTRUTURA header
+- ESLint: Zero errors; Dev server compiled successfully
+
+Stage Summary:
+- PayFac V2 architecture fully implemented in frontend
+- Backend compatibility preserved: provider_api_key/secret now optional
+- Merchant gateway form simplified: no credential fields, just activate methods
+- Admin Master Providers panel: complete CRUD with JSON credential management
+- New sidebar section "Infraestrutura Admin" for admin-only access
+- Zero breaking changes to existing code

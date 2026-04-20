@@ -39,6 +39,11 @@ import type {
   WalletResponse,
   CreatePayoutRequest,
   CreatePayoutResponse,
+  MasterProvider,
+  CreateMasterProviderRequest,
+  UpdateMasterProviderRequest,
+  MasterProviderResponse,
+  MasterProvidersResponse,
   APIError,
 } from './contracts';
 
@@ -305,6 +310,36 @@ export const payouts = {
   },
 };
 
+// ─── MASTER PROVIDERS (PayFac V2 — Admin Only) ─────────────────────────
+
+export const masterProviders = {
+  async list(): Promise<MasterProvidersResponse> {
+    return request('/master-providers');
+  },
+
+  async get(id: string): Promise<MasterProviderResponse> {
+    return request(`/master-providers/${id}`);
+  },
+
+  async create(data: CreateMasterProviderRequest): Promise<MasterProviderResponse> {
+    return request('/master-providers', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async update(id: string, data: UpdateMasterProviderRequest): Promise<MasterProviderResponse> {
+    return request(`/master-providers/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async delete(id: string): Promise<void> {
+    await request(`/master-providers/${id}`, { method: 'DELETE' });
+  },
+};
+
 // ─── AGGREGATED CLIENT ────────────────────────────────────────────────────
 
 export const api = {
@@ -318,4 +353,5 @@ export const api = {
   gateways,
   wallet,
   payouts,
+  masterProviders,
 };

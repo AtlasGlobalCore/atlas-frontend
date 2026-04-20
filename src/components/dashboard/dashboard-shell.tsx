@@ -14,6 +14,7 @@ import CRMPage from '@/components/dashboard/crm-page';
 import CatalogPage from '@/components/dashboard/catalog-page';
 import StoresPage from '@/components/dashboard/stores-page';
 import WalletCards from '@/components/dashboard/wallet-cards';
+import MasterProvidersAdmin from '@/components/dashboard/admin/master-providers';
 import { LogOut } from 'lucide-react';
 
 export default function DashboardShell() {
@@ -131,6 +132,17 @@ export default function DashboardShell() {
           {activeSection === 'treasury' && (
             <div>
               <WalletCards />
+            </div>
+          )}
+
+          {/* Admin Master Nodes Section */}
+          {activeSection === 'admin-master-nodes' && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-[10px] cyber-mono text-[#555566] tracking-wider">ADMIN // INFRAESTRUTURA</span>
+                <div className="flex-1 h-px bg-[rgba(51,51,51,0.3)]" />
+              </div>
+              <MasterProvidersAdmin />
             </div>
           )}
         </main>

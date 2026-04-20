@@ -9,7 +9,8 @@ export type DashboardSection =
   | 'crm'
   | 'catalog'
   | 'stores'
-  | 'treasury';
+  | 'treasury'
+  | 'admin-master-nodes';
 
 interface DashboardStore {
   activeSection: DashboardSection;

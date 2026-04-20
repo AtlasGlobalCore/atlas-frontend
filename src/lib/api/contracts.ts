@@ -291,8 +291,9 @@ export interface GatewaySettings {
   id: string;
   name: string;
   provider: GatewayProvider;
-  provider_api_key: string;
-  provider_secret?: string;
+  provider_api_key?: string;  // PayFac V2: optional — credentials managed by Admin
+  provider_secret?: string;   // PayFac V2: optional — credentials managed by Admin
+  master_provider_id?: string | null; // PayFac V2: link to MasterProvider
   store_id?: string;  // null = global, with value = store-specific
   environment: KeyEnvironment;
   status: 'active' | 'inactive';
@@ -303,16 +304,18 @@ export interface GatewaySettings {
 export interface CreateGatewayRequest {
   name: string;
   provider: GatewayProvider;
-  provider_api_key: string;
-  provider_secret?: string;
+  provider_api_key?: string;  // PayFac V2: optional — credentials managed by Admin
+  provider_secret?: string;   // PayFac V2: optional — credentials managed by Admin
+  master_provider_id?: string | null; // PayFac V2: link to MasterProvider
   store_id?: string | null;
   environment: KeyEnvironment;
 }
 
 export interface UpdateGatewayRequest {
   name?: string;
-  provider_api_key?: string;
-  provider_secret?: string;
+  provider_api_key?: string;    // PayFac V2: optional
+  provider_secret?: string;     // PayFac V2: optional
+  master_provider_id?: string | null; // PayFac V2: link to MasterProvider
   store_id?: string | null;
   status?: 'active' | 'inactive';
 }
@@ -325,6 +328,77 @@ export interface GatewayResponse {
 export interface GatewaysResponse {
   success: boolean;
   data: GatewaySettings[];
+}
+
+// ─── 12. MASTER PROVIDERS (PayFac V2 — Admin Only) ──────────────
+// GET    /api/v1/master-providers
+// POST   /api/v1/master-providers
+// PATCH  /api/v1/master-providers/:id
+// DELETE /api/v1/master-providers/:id
+
+export interface MasterProvider {
+  id: string;
+  providerType: string;
+  companyName: string;
+  merchantOfRecord?: string;
+  supportedMethods: string[];
+  supportedCurrencies: string[];
+  mode: 'test' | 'live';
+  isActive: boolean;
+  costPercentage: number;
+  costFixed: number;
+  settlementDays: number;
+  priorityScore: number;
+  monthlyVolumeLimit?: number;
+  currentMonthVolume: number;
+  healthStatus: string;
+  credentials_live?: Record<string, any>;
+  credentials_test?: Record<string, any>;
+}
+
+export interface CreateMasterProviderRequest {
+  providerType: string;
+  companyName: string;
+  merchantOfRecord?: string;
+  supportedMethods: string[];
+  supportedCurrencies: string[];
+  mode: 'test' | 'live';
+  isActive?: boolean;
+  costPercentage: number;
+  costFixed: number;
+  settlementDays: number;
+  priorityScore: number;
+  monthlyVolumeLimit?: number;
+  credentials_live?: Record<string, any>;
+  credentials_test?: Record<string, any>;
+}
+
+export interface UpdateMasterProviderRequest {
+  providerType?: string;
+  companyName?: string;
+  merchantOfRecord?: string;
+  supportedMethods?: string[];
+  supportedCurrencies?: string[];
+  mode?: 'test' | 'live';
+  isActive?: boolean;
+  costPercentage?: number;
+  costFixed?: number;
+  settlementDays?: number;
+  priorityScore?: number;
+  monthlyVolumeLimit?: number;
+  healthStatus?: string;
+  credentials_live?: Record<string, any>;
+  credentials_test?: Record<string, any>;
+}
+
+export interface MasterProviderResponse {
+  success: boolean;
+  data: MasterProvider;
+}
+
+export interface MasterProvidersResponse {
+  success: boolean;
+  data: MasterProvider[];
 }
 
 // ─── 8. USER / WEBHOOK ───────────────────────────────────────────────────

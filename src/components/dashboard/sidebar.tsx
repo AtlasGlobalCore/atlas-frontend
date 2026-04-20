@@ -14,6 +14,7 @@ import {
   Store,
   ExternalLink,
   Landmark,
+  Server,
 } from 'lucide-react';
 import { useDashboardStore, type DashboardSection } from '@/lib/dashboard-store';
 import { systemStateMock } from '@/lib/mock-system-state';
@@ -72,6 +73,12 @@ const navItems: { id: DashboardSection; label: string; icon: React.ReactNode; de
     label: 'Tesouraria',
     icon: <Landmark className="w-4 h-4" />,
     description: 'Cofre · Saldos · Saques'
+  },
+  {
+    id: 'admin-master-nodes',
+    label: 'Infraestrutura Admin',
+    icon: <Server className="w-4 h-4" />,
+    description: 'Nós da rede bancária',
   },
 ];
 
